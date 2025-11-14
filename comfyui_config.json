@@ -1,0 +1,93 @@
+{
+  "comfyui_host": "127.0.0.1",
+  "comfyui_port": 8188,
+  "workflows_dir": "./workflows",
+  "temp_dir": "/tmp/flame_comfyui",
+  "default_resolution": [1920, 1080],
+  "color_space": "sRGB",
+  "bit_depth": 8,
+  "connection_timeout": 30,
+  "execution_timeout": 300,
+  "auto_reconnect": true,
+  "max_retries": 3,
+  "workflow_presets": {
+    "upscale_4k": {
+      "workflow": "upscale_4k_professional.json",
+      "description": "Professional 4K upscaling with AI refinement",
+      "category": "upscaling",
+      "parameters": {
+        "denoise_strength": 0.35,
+        "cfg_scale": 7.5,
+        "steps": 20
+      }
+    },
+    "denoise": {
+      "workflow": "denoise_professional.json",
+      "description": "Remove noise and compression artifacts",
+      "category": "restoration",
+      "parameters": {
+        "denoise_strength": 0.45,
+        "cfg_scale": 6.5,
+        "steps": 25
+      }
+    },
+    "controlnet_vfx": {
+      "workflow": "controlnet_vfx_composition.json",
+      "description": "VFX composition with edge-aware ControlNet",
+      "category": "vfx",
+      "parameters": {
+        "control_strength": 0.8,
+        "cfg_scale": 8.0,
+        "steps": 30
+      }
+    },
+    "frame_interpolation": {
+      "workflow": "video_frame_interpolation.json",
+      "description": "Smooth frame interpolation for slow motion",
+      "category": "video",
+      "parameters": {
+        "blend_factor": 0.5,
+        "denoise_strength": 0.25,
+        "steps": 20
+      }
+    },
+    "color_grade": {
+      "workflow": "color_grade_enhancement.json",
+      "description": "Cinematic color grading enhancement",
+      "category": "color",
+      "parameters": {
+        "denoise_strength": 0.25,
+        "cfg_scale": 5.5,
+        "steps": 15
+      }
+    },
+    "texture_enhance": {
+      "workflow": "texture_detail_enhancement.json",
+      "description": "Enhance texture details and sharpness",
+      "category": "enhancement",
+      "parameters": {
+        "denoise_strength": 0.3,
+        "cfg_scale": 6.0,
+        "steps": 20
+      }
+    }
+  },
+  "flame_integration": {
+    "pybox_handler": "flame_comfyui_pybox.py",
+    "auto_inject_results": true,
+    "preserve_original": true,
+    "frame_export_format": "png",
+    "bit_depth_conversion": "auto"
+  },
+  "performance": {
+    "parallel_frames": 1,
+    "gpu_memory_fraction": 0.9,
+    "enable_caching": true,
+    "cache_dir": "/tmp/comfyui_cache"
+  },
+  "logging": {
+    "level": "INFO",
+    "file": "comfyui_integration.log",
+    "console": true
+  }
+}

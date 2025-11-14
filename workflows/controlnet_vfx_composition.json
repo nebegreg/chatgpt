@@ -1,0 +1,161 @@
+{
+  "1": {
+    "inputs": {
+      "image": "input_image",
+      "upload": "image"
+    },
+    "class_type": "LoadImage",
+    "_meta": {
+      "title": "Load Input for VFX"
+    }
+  },
+  "2": {
+    "inputs": {
+      "control_net_name": "control_v11p_sd15_canny.pth"
+    },
+    "class_type": "ControlNetLoader",
+    "_meta": {
+      "title": "Load ControlNet Canny"
+    }
+  },
+  "3": {
+    "inputs": {
+      "low_threshold": 100,
+      "high_threshold": 200,
+      "image": [
+        "1",
+        0
+      ]
+    },
+    "class_type": "Canny",
+    "_meta": {
+      "title": "Extract Edges"
+    }
+  },
+  "4": {
+    "inputs": {
+      "ckpt_name": "sd_xl_base_1.0.safetensors"
+    },
+    "class_type": "CheckpointLoaderSimple",
+    "_meta": {
+      "title": "Load Model"
+    }
+  },
+  "5": {
+    "inputs": {
+      "text": "professional VFX composition, cinematic lighting, high detail, photorealistic",
+      "clip": [
+        "4",
+        1
+      ]
+    },
+    "class_type": "CLIPTextEncode",
+    "_meta": {
+      "title": "VFX Style Prompt"
+    }
+  },
+  "6": {
+    "inputs": {
+      "text": "amateur, low quality, artifacts, distorted",
+      "clip": [
+        "4",
+        1
+      ]
+    },
+    "class_type": "CLIPTextEncode",
+    "_meta": {
+      "title": "Negative Prompt"
+    }
+  },
+  "7": {
+    "inputs": {
+      "strength": 0.8,
+      "conditioning": [
+        "5",
+        0
+      ],
+      "control_net": [
+        "2",
+        0
+      ],
+      "image": [
+        "3",
+        0
+      ]
+    },
+    "class_type": "ControlNetApply",
+    "_meta": {
+      "title": "Apply ControlNet"
+    }
+  },
+  "8": {
+    "inputs": {
+      "width": 1920,
+      "height": 1080,
+      "batch_size": 1
+    },
+    "class_type": "EmptyLatentImage",
+    "_meta": {
+      "title": "Create Latent Canvas"
+    }
+  },
+  "9": {
+    "inputs": {
+      "seed": 999,
+      "steps": 30,
+      "cfg": 8.0,
+      "sampler_name": "dpmpp_2m",
+      "scheduler": "karras",
+      "denoise": 1.0,
+      "model": [
+        "4",
+        0
+      ],
+      "positive": [
+        "7",
+        0
+      ],
+      "negative": [
+        "6",
+        0
+      ],
+      "latent_image": [
+        "8",
+        0
+      ]
+    },
+    "class_type": "KSampler",
+    "_meta": {
+      "title": "Generate with Composition Control"
+    }
+  },
+  "10": {
+    "inputs": {
+      "samples": [
+        "9",
+        0
+      ],
+      "vae": [
+        "4",
+        2
+      ]
+    },
+    "class_type": "VAEDecode",
+    "_meta": {
+      "title": "Decode Output"
+    }
+  },
+  "11": {
+    "inputs": {
+      "filename_prefix": "controlnet_vfx_result",
+      "images": [
+        "10",
+        0
+      ]
+    },
+    "class_type": "SaveImage",
+    "_meta": {
+      "title": "Save VFX Composite"
+    }
+  }
+}
